@@ -7,4 +7,7 @@ Risk Quantification Engine: Deploys a Historical Simulation Value-at-Risk (VaR) 
 Trend Projection (ML Layer): Evaluates non-neural time-series trajectories using an optimized Scikit-Learn linear regression model to project risk trendlines 30 days forward.
 Interactive Dashboard: Packaged inside a responsive, browser-based Streamlit user interface featuring dynamic weight allocation adjustment sliders and reactive metric visualization.
 # 🛠️ Technical StackLanguage: 
-Python 3.xData Manipulation: Pandas,NumPy (Linear Algebra / Vectorization Engine)Modeling: Scikit-Learn (Ridge/Linear Regression)Frontend/UI: Streamlit Web Framework
+Python 3.x
+Data Manipulation: Pandas,NumPy (Linear Algebra / Vectorization Engine)
+Modeling: Scikit-Learn (Ridge/Linear Regression)
+Frontend/UI: Streamlit Web Framework
