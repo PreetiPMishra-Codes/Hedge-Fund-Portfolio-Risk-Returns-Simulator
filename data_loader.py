@@ -1,49 +1,87 @@
-import yfinance as yf
-import pandas as pd 
-import numpy as np 
-#portfolio universe
-TICKERS=["AAPL","MSFT","GOOGL","AMZN"];
-START_DATE="2020-07-01" #YYYY-MM-DD
-END_DATE="2026-07-01" # 5 years we are taking long enough to track macroeconomic shifts
-#yet short enuf to be relevant and have fast data processing
+"""
+Hedge Fund Portfolio Risk & Returns Simulator
 
-def fetch_price_data(tkr,start,end):
+PHASE 1: Data Ingestion & Returns Calculation
+"""
+
+import yfinance as yf
+import pandas as pd
+import numpy as np
+
+
+# STEP 1: Define the portfolio universe and time window
+
+TICKERS = ["AAPL", "MSFT", "GOOGL", "AMZN"]
+START_DATE = "2021-01-01"
+END_DATE = "2026-07-11"  
+
+    
+# STEP 2: Download historical price data
+def fetch_price_data(tickers, start, end):
     """
     Downloads adjusted close prices for a list of tickers.
-    Returns a single DataFrame with tickers as columns.
+    Returns a single DataFrame: rows = dates, columns = tickers.
     """
-    raw_data=yf.download(tkr,start=start,end=end,auto_adjust=True) #split and dividend-adjusted closing prices
-    prices=raw_data["Close"] #turns to a single-layer dataframe
-    #rows dates, cols tickers
+    raw_data = yf.download(tickers, start=start, end=end, auto_adjust=True)
+
+    # auto_adjust=True already adjusts for splits/dividends and
+    # collapses the price to a single 'Close' column per ticker.
+    prices = raw_data["Close"]
+
     return prices
 
-    #execution block
-if __name__ == "__main__":
-    prices = fetch_price_data(TICKERS, START_DATE, END_DATE)
-    print(prices.head())
-    print(prices.shape)
-    print(prices.isna().sum())
 
-    #data cleaning
+# STEP 3: Clean the data
 def clean_price_data(prices: pd.DataFrame) -> pd.DataFrame:
     """
-    Forward-fills missing values (e.g. holidays mismatched across exchanges),
-    then drops any remaining NaN rows (usually just the very start).
+    Handles missing data (holidays, delistings, API gaps).
     """
+    # Forward-fill first: if a price is missing for a day, assume
+    # it's still worth what it was worth the last known day.
     prices = prices.ffill()
+
+    # Drop any leading rows that are still NaN
     prices = prices.dropna()
+
     return prices
 
+
+# STEP 4: Calculate daily percentage returns
 def calculate_daily_returns(prices: pd.DataFrame) -> pd.DataFrame:
     """
-    Converts price series into daily percentage returns.
-    This is the foundation of almost all quant risk metrics.
+    Converts a price series into a daily returns series.
     """
-    returns = prices.pct_change().dropna()
-    return returns
-prices = fetch_price_data(TICKERS, START_DATE, END_DATE)
-prices = clean_price_data(prices)
-returns = calculate_daily_returns(prices)
+    daily_returns = prices.pct_change()
 
-print(returns.head())
-print(returns.describe())
+    # The very first row will always be NaN (no "previous day" to
+    # compare against), so we drop it.
+    daily_returns = daily_returns.dropna()
+
+    return daily_returns
+
+
+# ----------------------------------------------------------------------
+# MAIN — run Phase 1 end to end
+# ----------------------------------------------------------------------
+if __name__ == "__main__":
+    print(f"Fetching data for: {TICKERS}")
+    prices = fetch_price_data(TICKERS, START_DATE, END_DATE)
+
+    print("\nRaw price data (first 5 rows):")
+    print(prices.head())
+
+    prices_clean = clean_price_data(prices)
+    print(f"\nMissing values after cleaning:\n{prices_clean.isna().sum()}")
+
+    returns = calculate_daily_returns(prices_clean)
+    print("\nDaily returns (first 5 rows):")
+    print(returns.head())
+
+    print("\nSummary statistics of daily returns:")
+    print(returns.describe())
+
+    # Save to disk so later phases (weights, VaR, ML) can reuse this
+    # without re-downloading every time
+    prices_clean.to_csv("clean_prices.csv")
+    returns.to_csv("daily_returns.csv")
+    print("\nSaved clean_prices.csv and daily_returns.csv")
