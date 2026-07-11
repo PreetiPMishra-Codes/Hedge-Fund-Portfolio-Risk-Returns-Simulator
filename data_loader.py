@@ -2,7 +2,6 @@
 Hedge Fund Portfolio Risk & Returns Simulator
 
 Data Ingestion & Data cleaning 
-calculate daily pct returns
 """
 
 import yfinance as yf
@@ -45,42 +44,3 @@ def clean_price_data(prices:pd.DataFrame)->pd.DataFrame:
     prices = prices.dropna()
 
     return prices
-
-
-# Calculate daily percentage returns
-def calculate_daily_returns(prices:pd.DataFrame)->pd.DataFrame:
-    """
-    Converts a price series into a daily returns series.
-    """
-    daily_returns = prices.pct_change()
-
-    # The very first row will always be NaN (no "previous day" to
-    # compare against), so we drop it.
-    daily_returns = daily_returns.dropna()
-
-    return daily_returns
-
-
-# ----------------------------------------------------------------------
-# MAIN execution block
-# ----------------------------------------------------------------------
-if __name__ == "__main__":
-    print(f"Fetching data for: {TICKERS}")
-    prices = fetch_price_data(TICKERS, START_DATE, END_DATE)
-
-    print("\nRaw price data (first 5 rows):")
-    print(prices.head())
-
-    prices_clean = clean_price_data(prices)
-    print(f"\nMissing values after cleaning:\n{prices_clean.isna().sum()}")
-
-    returns = calculate_daily_returns(prices_clean)
-    print("\nDaily returns (first 5 rows):")
-    print(returns.head())
-
-    print("\nSummary statistics of daily returns:")
-    print(returns.describe())
-
-    prices_clean.to_csv("clean_prices.csv")
-    returns.to_csv("daily_returns.csv")
-    print("\nSaved clean_prices.csv and daily_returns.csv")
