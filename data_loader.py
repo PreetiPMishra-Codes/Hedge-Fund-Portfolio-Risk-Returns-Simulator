@@ -1,7 +1,7 @@
 """
 Hedge Fund Portfolio Risk & Returns Simulator
 
-PHASE 1: Data Ingestion & Returns Calculation
+Data Ingestion & Data cleaning
 """
 
 import yfinance as yf
@@ -9,20 +9,20 @@ import pandas as pd
 import numpy as np
 
 
-# STEP 1: Define the portfolio universe and time window
+# Define the portfolio universe and time window
 
 TICKERS = ["AAPL", "MSFT", "GOOGL", "AMZN"]
 START_DATE = "2021-01-01"
 END_DATE = "2026-07-11"  
 
     
-# STEP 2: Download historical price data
-def fetch_price_data(tickers, start, end):
+# Download historical price data
+def fetch_price_data(tickers,start,end):
     """
     Downloads adjusted close prices for a list of tickers.
     Returns a single DataFrame: rows = dates, columns = tickers.
     """
-    raw_data = yf.download(tickers, start=start, end=end, auto_adjust=True)
+    raw_data = yf.download(tickers,start=start,end=end,auto_adjust=True)
 
     # auto_adjust=True already adjusts for splits/dividends and
     # collapses the price to a single 'Close' column per ticker.
@@ -31,10 +31,10 @@ def fetch_price_data(tickers, start, end):
     return prices
 
 
-# STEP 3: Clean the data
-def clean_price_data(prices: pd.DataFrame) -> pd.DataFrame:
+# Clean the data
+def clean_price_data(prices:pd.DataFrame)->pd.DataFrame:
     """
-    Handles missing data (holidays, delistings, API gaps).
+    Handles missing data (holidays,delistings,API gaps).
     """
     # Forward-fill first: if a price is missing for a day, assume
     # it's still worth what it was worth the last known day.
@@ -46,8 +46,8 @@ def clean_price_data(prices: pd.DataFrame) -> pd.DataFrame:
     return prices
 
 
-# STEP 4: Calculate daily percentage returns
-def calculate_daily_returns(prices: pd.DataFrame) -> pd.DataFrame:
+# Calculate daily percentage returns
+def calculate_daily_returns(prices:pd.DataFrame)->pd.DataFrame:
     """
     Converts a price series into a daily returns series.
     """
@@ -61,7 +61,7 @@ def calculate_daily_returns(prices: pd.DataFrame) -> pd.DataFrame:
 
 
 # ----------------------------------------------------------------------
-# MAIN — run Phase 1 end to end
+# MAIN execution block
 # ----------------------------------------------------------------------
 if __name__ == "__main__":
     print(f"Fetching data for: {TICKERS}")
@@ -80,8 +80,6 @@ if __name__ == "__main__":
     print("\nSummary statistics of daily returns:")
     print(returns.describe())
 
-    # Save to disk so later phases (weights, VaR, ML) can reuse this
-    # without re-downloading every time
     prices_clean.to_csv("clean_prices.csv")
     returns.to_csv("daily_returns.csv")
     print("\nSaved clean_prices.csv and daily_returns.csv")
