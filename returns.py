@@ -1,4 +1,5 @@
 # Calculate daily percentage returns
+import pandas as pd
 def calculate_daily_returns(prices:pd.DataFrame)->pd.DataFrame:
     """
     Converts a price series into a daily returns series.
