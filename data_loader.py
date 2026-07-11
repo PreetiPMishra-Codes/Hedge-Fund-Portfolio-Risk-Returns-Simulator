@@ -1,7 +1,8 @@
 """
 Hedge Fund Portfolio Risk & Returns Simulator
 
-Data Ingestion & Data cleaning
+Data Ingestion & Data cleaning 
+calculate daily pct returns
 """
 
 import yfinance as yf
