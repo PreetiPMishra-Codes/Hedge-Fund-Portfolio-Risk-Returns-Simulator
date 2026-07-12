@@ -3,6 +3,13 @@
 An institutional-grade portfolio risk analysis engine and simulator built from scratch using vectorized mathematical computations. This application bypasses slow iterative loops in favor of linear algebra matrix operations to ingest historical market data, calculate portfolio return dynamics, and model worst-case risk scenarios. 
 
 Designed specifically as a lightweight, interactive utility for quantitative evaluation and trend projection.
+A quantitative portfolio analysis tool that fetches real historical stock data,
+computes risk/return metrics using vectorized NumPy/Pandas operations, and
+projects short-term trends with a lightweight ML model — packaged in an
+interactive Streamlit dashboard.
+
+## Status
+🚧 In progress — built incrementally as part of a learning project.
 
 ---
 
