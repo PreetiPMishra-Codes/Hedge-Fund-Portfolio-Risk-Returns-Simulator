@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 #historical VAR
-def caclculate_historical _var(portfolio_ret:pd.Series,confidence_level:float=0.95)->float:
+def calculate_historical_var(portfolio_ret:pd.Series,confidence_level:float=0.95)->float:
     """
     Historical VaR: looks at the ACTUAL distribution of past returns
     and finds the cutoff below which only (1 - confidence_level)% of
