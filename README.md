@@ -41,16 +41,6 @@ sliders and watch every number and chart update live.
 
 ---
 
-## A look at it
-Some Screenshots of the dashboard, graph and heatmap are attached in screenshots file
-
-
-```
-
-```
-
----
-
 ## The math, explained simply
 
 I didn't want any number on this dashboard that I couldn't explain if
