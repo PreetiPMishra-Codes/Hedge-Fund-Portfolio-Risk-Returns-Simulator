@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-def calculate_portfolio_returns(prices:pd.DataFrame,weights:np.ndarray)->pd.Series:
+def calculate_portfolio_returns(returns:pd.DataFrame,weights:np.ndarray)->pd.Series:
     """
     combines individual stock returns into a single portfolio return series using matrix multiplication
     returns: DataFrame of shape (n_days, n_assets)
