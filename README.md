@@ -42,12 +42,11 @@ sliders and watch every number and chart update live.
 ---
 
 ## A look at it
+Some Screenshots of the dashboard, graph and heatmap are attached in screenshots file
 
-*(Add your own screenshots here before submitting — this section is
-usually the first thing a reviewer actually looks at.)*
 
 ```
-Some Screenshots of the dashboard, graph and heatmap are attached in screenshots file
+
 ```
 
 ---
